@@ -11,11 +11,11 @@ pipeline {
                 git 'https://github.com/hemanth22/HCL_Test.git'
             }
         }
-    }
 
         stage('Build') { 
             steps {
                 sh 'mvn -B -DskipTests clean package' 
             }
         }
+    }
 }
