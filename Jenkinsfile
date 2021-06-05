@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine' 
-            args '-v /root/.m2:/root/.m2' 
-        }
-    }
+    agent any
     stages {
         stage('Clone') {
             steps {
@@ -15,6 +10,18 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'mvn -B -DskipTests clean package' 
+            }
+        }
+        stage('Test') { 
+            steps {
+                sh 'mvn -B test' 
+            }
+        }
+        stage('Sonar Test') { 
+            steps {
+                withEnv(['SONAR_TOKEN=token']) {
+                    sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar' 
+                }
             }
         }
     }
